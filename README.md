@@ -1,8 +1,8 @@
 # Listly
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/listly`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+There are lots of occasions in Rails apps where you need simple lists, such as a list of States in a Country etc.
+Listly is for when you want to store data in hash format in external yml type files such as storing them in the
+rails locales files that can be retrieved from I18n.
 
 ## Installation
 
