@@ -27,6 +27,19 @@ describe 'BaseList' do
     end
   end
 
+  it 'each internal list object should have an attr_reader for each of the hash codes' do
+    test_obj = @test1_types[0]
+
+    expect(test_obj).to respond_to(:test1_type_code)
+    expect(test_obj).to respond_to(:test1_type_name)
+
+    expect(test_obj.test1_type_code).to eq 'nsw'
+    expect(test_obj.test1_type_name).to eq 'New South Wales'
+
+    expect(test_obj[:test1_type_code]).to eq 'nsw'
+    expect(test_obj[:test1_type_name]).to eq 'New South Wales'
+  end
+
   it 'should include nsw, qld and sa states' do
     types_arr = ['nsw', 'qld', 'sa']
     @test1_types.each do |item|

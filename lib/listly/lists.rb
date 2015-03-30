@@ -1,11 +1,17 @@
 #
 module Listly
   #
-  # List Class Names as Constants
-  include Listly::ListConstants
-  #
   # some convenience methods to create the list modules and class from the CONSTANT
   class << self
+    #
+    # List Class Names as Constants
+    def include_constants_module(constants_module = nil)
+      if constants_module
+        self.send(:include, constants_module)
+      else
+        self.send(:include, Listly::ListConstants)
+      end
+    end
     # Returns a hash of class names to hash storage details as sym.
     def list_name_constants
       self.constants.each_with_object({}) do |name, hash|
@@ -25,6 +31,10 @@ module Listly
     end
   end
 end
+#
+# this will dynamically include the configured Constants module..
+#
+Listly.include_constants_module
 #
 # as this file is loaded each List Module and internal item Class is dynamically created!
 #
