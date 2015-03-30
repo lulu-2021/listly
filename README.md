@@ -4,6 +4,12 @@ There are lots of occasions in Rails apps where you need simple lists, such as a
 Listly is for when you want to store data in hash format in external yml type files such as storing them in the
 rails locales files that can be retrieved from I18n.
 
+## Travis CI
+[![Build Status](https://travis-ci.org/netflakes/listly.svg?branch=master)](https://travis-ci.org/netflakes/listly)
+
+## Coveralls
+[![Coverage Status](https://coveralls.io/repos/netflakes/listly/badge.svg?branch=master)](https://coveralls.io/r/netflakes/listly?branch=master)
+
 ## Installation
 
 Add this line to your application's Gemfile:
