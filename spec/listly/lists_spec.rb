@@ -7,7 +7,7 @@ class DummyStateList
   include Listly::Test1Type
 end
 #
-describe 'Test1 Type List' do
+describe 'BaseList' do
   before do
     @test1_type_hash = [
       {'code' => 'nsw', 'name' => 'New South Wales'},
