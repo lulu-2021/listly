@@ -1,3 +1,5 @@
+#module Listly
+require 'active_support'
 #
 module ListParent
   #
@@ -32,6 +34,7 @@ module ListParent
       args.each do |name, value|
         instance_variable_get("@#{name}")
         instance_variable_set("@#{name}", value)
+        self.class_eval("attr_reader :#{name}")
       end
     end
 
@@ -76,6 +79,8 @@ module Lists
   end
 end
 #
+# as this file is loaded each List Module and internal item Class is dynamically created!
+#
 Lists.list_name_constants.each do |name, store_hash|
   list_module = Module.new
   new_module_name = Lists.module_name_for_list_name(name)
@@ -105,3 +110,5 @@ Lists.list_name_constants.each do |name, store_hash|
   list_module.const_set(class_name, klass)
   Lists.const_set(new_module_name, list_module)
 end
+
+#end

@@ -1,5 +1,6 @@
 #
-require File.dirname(__FILE__) + '/listly/base_list'
+#require File.dirname(__FILE__) + '/listly/base_list'
+require File.dirname(__FILE__) + '/listly/lists'
 require File.dirname(__FILE__) + '/listly/railtie' if defined? ::Rails::Railtie
 #
 # The config class allows the Rails Application to store configuration about the gem
