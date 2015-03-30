@@ -9,7 +9,7 @@ module Listly
       list_items_hash.each do |item|
         data = {}
         item.each{ |key, value| data["#{type_prefix}_#{key}"] = "#{value}" }
-        list_items << Module.const_get(item_class).new(data)
+        list_items << Module.const_get("Listly::#{item_class}").new(data)
       end
       list_items
     end
@@ -32,8 +32,11 @@ module Listly
         @list_hash = args
 
         args.each do |name, value|
+          # - add instance getters and setters dynamically
           instance_variable_get("@#{name}")
           instance_variable_set("@#{name}", value)
+          # - add attr_reader dynamically
+          self.class_eval("attr_reader :#{name}")
         end
       end
 

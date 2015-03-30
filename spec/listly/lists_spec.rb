@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'i18n'
 #
 class DummyStateList
-  include Lists::Test1Type
+  include Listly::Test1Type
 end
 #
 describe 'Test1 Type List' do
@@ -23,7 +23,7 @@ describe 'Test1 Type List' do
     expect(@test1_types).to be_a(Array)
 
     @test1_types.each do |item|
-      expect(item).to be_a(Lists::Test1Type::MyTest1Type)
+      expect(item).to be_a(Listly::Test1Type::MyTest1Type)
     end
   end
 

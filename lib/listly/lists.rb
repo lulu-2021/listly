@@ -1,69 +1,16 @@
-#module Listly
-require 'active_support'
 #
-module ListParent
-  #
-  # - creates items of the passed in item_class with the passed in type_prefix for code and name for list items
-  def all_list_items(type_prefix, item_class, list_items_hash = {})
-    list_items = []
-    list_items_hash.each do |item|
-      data = {}
-      item.each{ |key, value| data["#{type_prefix}_#{key}"] = "#{value}" }
-      list_items << Module.const_get("Lists::#{item_class}").new(data)
-    end
-    list_items
-  end
-
-  def list_item_name(all_items, code_field, name_field, list_item_code)
-    name = ''
-    all_items.map do |item|
-      if (item.send code_field) == list_item_code
-        name = item.send name_field
-      end
-    end
-    name
-  end
-
-  class MyListType
-    attr_accessor :list_hash # - this is for convenience methods in Rails
-
-    # - dynamically create the properties from the passed in hash at runtime
-    define_method :initialize do |args|
-      @list_hash = args
-
-      args.each do |name, value|
-        instance_variable_get("@#{name}")
-        instance_variable_set("@#{name}", value)
-        self.class_eval("attr_reader :#{name}")
-      end
-    end
-
-    # - these are for convenience methods in Rails i.e. make lists behave like AR objects
-    def [](key)
-      list_hash[key.to_s]
-    end
-
-    def []=(key, value)
-      list_hash[key.to_s] = value
-    end
-  end
-
-end
-#
-module Lists
+module Listly
   #
   # List Class Names as Constants
-  TEST1_TYPE = :test1_types_hash
-  TEST2_TYPE = :test2_types_hash
+  include Listly::ListConstants
   #
-
   # some convenience methods to create the list modules and class from the CONSTANT
   class << self
     # Returns a hash of class names to hash storage details as sym.
     def list_name_constants
       self.constants.each_with_object({}) do |name, hash|
         # Ignore any class constants
-        next if (storage_location = Lists.const_get(name)).is_a?(Module)
+        next if (storage_location = Listly.const_get(name)).is_a?(Module)
         hash[name] = storage_location
       end
     end
@@ -81,12 +28,12 @@ end
 #
 # as this file is loaded each List Module and internal item Class is dynamically created!
 #
-Lists.list_name_constants.each do |name, store_hash|
+Listly.list_name_constants.each do |name, store_hash|
   list_module = Module.new
-  new_module_name = Lists.module_name_for_list_name(name)
+  new_module_name = Listly.module_name_for_list_name(name)
   # - add the new module to the list of constants!
   list_module.module_eval do
-    include ListParent
+    include Listly::BaseList
 
     define_method(:storage_location) { store_hash }
 
@@ -102,13 +49,12 @@ Lists.list_name_constants.each do |name, store_hash|
     }
   end
   # - create the internal class that will hold the list data (hash)
-  klass = Class.new(ListParent::MyListType)
+  #klass = Class.new(ListParent::MyListType)
+  klass = Class.new(Listly::BaseList::MyListType)
   klass.send(:define_method, :code) { code }
 
   # - add this class to the module constants
   class_name = "My#{new_module_name}"
   list_module.const_set(class_name, klass)
-  Lists.const_set(new_module_name, list_module)
+  Listly.const_set(new_module_name, list_module)
 end
-
-#end
