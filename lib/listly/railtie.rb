@@ -1,6 +1,4 @@
 #
-#require 'listly/load_lists'
-#
 module Listly
   class Railtie < Rails::Railtie
     #
@@ -16,7 +14,8 @@ module Listly
         config.listly_constants_module = app.config.listly[:listly_constants_module]
       end
       #
-      # here we will dynamically load the client rails app module that has the
+      # dynamically load the client rails app module that has the list constants
+      LoadLists.load
       Listly.include_constants_module
     end
   end

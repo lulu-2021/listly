@@ -13,8 +13,6 @@ require 'listly'
 #
 require 'spec_helper_load_application'
 #
-require 'listly/load_lists'
-#
 class Dummy3Test
   include Listly::Test3Type
 end

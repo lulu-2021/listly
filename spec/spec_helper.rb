@@ -18,3 +18,5 @@ require 'listly'
 #
 # - this loads the actual lists
 require 'listly/load_lists'
+# - then run the load process that is normally handled by rails!
+LoadLists.load
