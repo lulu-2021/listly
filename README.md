@@ -26,9 +26,103 @@ Or install it yourself as:
 
     $ gem install listly
 
+## Configuration
+
+Firstly in your rails config/application.rb - you need to set the two config variables
+for the listly gem. The :local_list_store is for the next release. It doesn't do anything just yet.
+The :local_list_constants, is a symbol of a simple module that needs to be loaded in the rails
+load process i.e. putting it in the lib folder will suffice. The module (see below) just needs
+to contain a list of constants and their respective values that relate to where the list data
+is stored. The default is to store this data in the i18n internatialisation files in
+config/locales. Anywhere will do since they all will be loaded!
+
+
+```ruby
+
+module YourRailsApp
+  class Application < Rails::Application
+    ...
+    config.listly.listly_store_location = :local_list_store
+    config.listly.listly_constants_module = :local_list_constants
+    ...
+  end
+end
+
+```
+
+Here is an example of the module and some sample constants that will be turned into lists.
+
+```ruby
+
+module LocalListConstants
+
+  STATE_TYPES = :state_type_hash
+  SEX_TYPES = :sex_type_hash
+
+end
+
+```
+
+The in the "config/locales/views/en.yml" (this can be in any of the locale files) you can
+put the respective data relating to the above constant values.
+
+```ruby
+
+  states_hash: [
+    {code: 'act', name: 'ACT', desc: 'Australian Capital Teritory'},
+    {code: 'nsw', name: 'NSW', desc: 'New South Wales'},
+    {code: 'nt', name: 'NT', desc: 'Northern Teritory'},
+    {code: 'qld', name: 'QLD', desc: 'Queensland'},
+  ]
+  sex_types_hash: [
+    {code: 'male', name: 'Male'},
+    {code: 'female', name: 'Female'},
+    {code: 'notset', name: 'Not Set'}
+  ]
+
+```
+
+Listly will create a module from each constant with its respective data. It will create
+an internal class that holds instance properties and attr_reader access methods for each.
+i.e. "states_hash: code" will be the code attribute on the list etc..
+
 ## Usage
 
-TODO: Write usage instructions here
+To therefore use this in a view template in rails or a form - you simply need to include
+the module with the list into the view template. I frequently use mustache view wrappers
+which would look like this:
+
+```ruby
+
+require "mustache_extras"
+
+module Wrapper
+  module Person
+
+    class New < ::Stache::Mustache::View
+      include PageHeader
+      include Mustache::FormBuilder
+      include Wrapper::Person::Form
+      include SexTypeList   # <------ This is the included list module!
+
+```
+
+Then in the actual form... this is how you can use the list - i.e. the method
+"all_sex_types" was derived from the "SexType" module name and the "sex_type_code"
+and "sex_type_name" methods will populate the form with the relevant "code" and
+"name" data - that was pulled from your i18n locale file!
+
+
+```ruby
+
+sex_field: f.collection_select(:sex, all_sex_types, :sex_type_code, :sex_type_name, {
+  label: t('patients.sex'),
+  config: {
+    prompt: t('form.please_select'),
+  }
+}),
+
+```
 
 ## Development
 
