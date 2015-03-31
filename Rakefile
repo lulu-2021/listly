@@ -17,5 +17,5 @@ namespace :spec do
     end
   end
   #
-  task :all => ["spec:select:listly", "spec:select:railtie"]
+  task :all => ["spec:select:railtie", "spec:select:listly"]
 end
