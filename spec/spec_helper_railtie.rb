@@ -10,11 +10,5 @@ require 'rspec'
 require 'rspec/given'
 require 'rack'
 #
-#require 'rails'
-require 'active_support'
-require 'active_support/core_ext'
+require 'rails'
 #
-require 'listly'
-#
-# - this loads the actual lists
-require 'listly/load_lists'

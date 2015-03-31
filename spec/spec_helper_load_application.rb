@@ -1,14 +1,7 @@
 #
 # Setup a test app
 #
-#require 'rack/multi_company'
-#
 module TestApp
-  #
-  module DummyTestConstants
-    TEST3_TYPE = :test3_types_hash
-    TEST4_TYPE = :test4_types_hash
-  end
   #
   class Application < ::Rails::Application
     #
@@ -18,7 +11,7 @@ module TestApp
     puts "\n\n Listly TestApp: Rails Starting..."
     #
     config.listly.listly_store_location = :test_hash_store
-    config.listly.constants_module = :dummy_test_constants
+    config.listly.listly_constants_module = :dummy_test_constants
     #
   end
 end

@@ -8,7 +8,7 @@ require File.dirname(__FILE__) + '/listly/railtie' if defined? ::Rails::Railtie
 #
 module Listly
   class Config
-    attr_accessor :listly_store_location, :constants_module
+    attr_accessor :listly_store_location, :listly_constants_module
   end
 
   def self.config
@@ -19,3 +19,4 @@ module Listly
     yield self.config
   end
 end
+#
