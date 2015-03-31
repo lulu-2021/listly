@@ -43,7 +43,7 @@ module YourRailsApp
   class Application < Rails::Application
     ...
     config.listly.listly_store_location = :local_list_store
-    config.listly.listly_constants_module = :local_list_constants
+    config.listly.listly_constants_module = :local_list_constants # <--- ModuleName as symbol
     ...
   end
 end
@@ -54,10 +54,10 @@ Here is an example of the module and some sample constants that will be turned i
 
 ```ruby
 
-module LocalListConstants
+module LocalListConstants   # <------ Module name see the symbol "listly_constants_module" above
 
-  STATE_TYPES = :state_type_hash
-  SEX_TYPES = :sex_type_hash
+  STATE_TYPES = :state_type_hash  # <----- see the hash stored in locales below
+  SEX_TYPES = :sex_type_hash      # <----- see the hash stored in locales below
 
 end
 
@@ -68,13 +68,13 @@ put the respective data relating to the above constant values.
 
 ```ruby
 
-  states_hash: [
+  state_types_hash: [   # <------- Array of hashes - name corresponds to constants see above
     {code: 'act', name: 'ACT', desc: 'Australian Capital Teritory'},
     {code: 'nsw', name: 'NSW', desc: 'New South Wales'},
     {code: 'nt', name: 'NT', desc: 'Northern Teritory'},
     {code: 'qld', name: 'QLD', desc: 'Queensland'},
   ]
-  sex_types_hash: [
+  sex_types_hash: [     # <------- Array of hashes - name corresponds to constants see above
     {code: 'male', name: 'Male'},
     {code: 'female', name: 'Female'},
     {code: 'notset', name: 'Not Set'}
@@ -103,7 +103,8 @@ module Wrapper
       include PageHeader
       include Mustache::FormBuilder
       include Wrapper::Person::Form
-      include SexTypeList   # <------ This is the included list module!
+      include SexTypes   # <------ This is the included list module - see the SEX_TYPES
+                         # constant in the LocalListConstants module above
 
 ```
 
@@ -121,6 +122,13 @@ sex_field: f.collection_select(:sex, all_sex_types, :sex_type_code, :sex_type_na
     prompt: t('form.please_select'),
   }
 }),
+
+# 'all_sex_types' --> is a listly defined method to get the whole list
+# 'sex_type_code' --> is a listly defined attribute on the inner class
+# 'sex_type_name' --> is a listly defined attribute on the inner class
+
+# NB: The gem creates attributes from the names of the hash codes and gives the attributes
+# values according to the hash values - i.e. from the data in the i18n stored array of hashes!
 
 ```
 
