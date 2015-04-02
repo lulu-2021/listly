@@ -39,9 +39,13 @@ config/locales. Anywhere will do since they all will be loaded!
 
 ```ruby
 
+# your module needs to be loaded/required before the application starts such as
+require File.dirname(__FILE__) + '/../lib/local_list_constants'
+
 module YourRailsApp
   class Application < Rails::Application
     ...
+    # Then the settings need to be included in the rails start up process
     config.listly.listly_store_location = :local_list_store
     config.listly.listly_constants_module = :local_list_constants # <--- ModuleName as symbol
     ...
@@ -88,6 +92,28 @@ i.e. "states_hash: code" will be the code attribute on the list etc..
 
 ## Usage
 
+### To test this in the Rails console:
+
+```ruby
+rails c
+
+# Then create a dummy test class & include one of your lists - such as the Sex List above
+class DummyList
+  include Listly::SexTypes
+end
+
+test_list = DummyList.new
+
+# then to see all items in the list
+
+test_list.all_sex_types  # - this will give you an array of all the sex types..
+
+=> [#<Listly::SexTypes::MySexTypes:0x000001078a13f0 @list_hash={"sex_types_code"=>"male", "sex_types_name"=>"Male"}, @sex_types_code="male", @sex_types_name="Male">, #<Listly::SexTypes::MySexTypes:0x000001078a0720 @list_hash={"sex_types_code"=>"female", "sex_types_name"=>"Female"}, @sex_types_code="female", @sex_types_name="Female">, #<Listly::SexTypes::MySexTypes:0x0000010789ba18 @list_hash={"sex_types_code"=>"notset", "sex_types_name"=>"Not Set"}, @sex_types_code="notset", @sex_types_name="Not Set">]
+
+```
+
+### How to use this in a view template and or rails form:
+
 To therefore use this in a view template in rails or a form - you simply need to include
 the module with the list into the view template. I frequently use mustache view wrappers
 which would look like this:
@@ -103,7 +129,7 @@ module Wrapper
       include PageHeader
       include Mustache::FormBuilder
       include Wrapper::Person::Form
-      include SexTypes   # <------ This is the included list module - see the SEX_TYPES
+      include ListLy::SexTypes   # <------ This is the included list module - see the SEX_TYPES
                          # constant in the LocalListConstants module above
 
 ```

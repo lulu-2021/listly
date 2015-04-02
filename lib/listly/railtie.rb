@@ -2,8 +2,6 @@
 module Listly
   class Railtie < Rails::Railtie
     #
-    puts "\n\n Loading Railtie..\n\n"
-    #
     # enable namespaced configuration in Rails environments
     config.listly = ActiveSupport::OrderedOptions.new
     #
